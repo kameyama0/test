@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class tenmetsu_image : MonoBehaviour
+{
+    public Image image; // 点滅させるImageコンポーネント
+    public float blinkSpeed = 1.0f; // 点滅速度の制御
+    private bool isBlinking = false;
+    private float timer = 0.0f;
+
+    void Start()
+    {
+        if (image == null)
+        {
+            Debug.LogError("Imageコンポーネントが指定されていません。");
+            enabled = false;
+            return;
+        }
+    }
+
+    void Update()
+    {
+        if (image == null) return;
+
+        timer += Time.deltaTime * blinkSpeed;
+        float alpha = Mathf.Abs(Mathf.Sin(timer)); // 0から1の範囲で点滅
+
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
+    }
+}
