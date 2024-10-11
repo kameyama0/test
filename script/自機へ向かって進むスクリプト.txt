@@ -1,0 +1,50 @@
+//自機には「ziki」というタグを付ける
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class enemy_motion_pattern_4 : MonoBehaviour
+{
+    private GameObject targetObject;  // ターゲットのオブジェクト
+    private Vector2 targetPosition;    // ターゲットの初期座標
+    private Vector2 direction;          // 移動方向
+    public float speed = 5f;           // 移動速度
+    private bool hasStartedMoving = false; // 移動開始フラグ
+
+    void Start()
+    {
+        targetObject = GameObject.FindGameObjectWithTag("ziki");
+
+        if (targetObject != null)
+        {
+            // ターゲットの座標を初回取得
+            targetPosition = targetObject.transform.position;
+            direction = (targetPosition - (Vector2)transform.position).normalized;
+            hasStartedMoving = true;
+        }
+    }
+
+    void Update()
+    {
+        if (hasStartedMoving)
+        {
+            // 移動
+            transform.position += (Vector3)(direction * speed * Time.deltaTime);
+
+            // ターゲットに到達した場合、方向を更新
+            if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
+            {
+                // 新しい位置を計算して、その方向へ進み続ける
+                targetPosition += direction; // 現在の方向に進む
+            }
+
+            // オブジェクトが進行方向を向く
+            if (direction != Vector2.zero)  // ゼロベクトルチェック
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * speed);
+            }
+        }
+    }
+}
