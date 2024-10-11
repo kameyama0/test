@@ -1,0 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class enemy_attack_pattern_1 : MonoBehaviour
+{
+    public GameObject enemy_bullet; //発射する弾
+    public float interval;  //弾を発射するまでの間隔(秒)
+
+    private IEnumerator Start()
+    {
+        yield return new WaitForSeconds(interval); 
+        Instantiate(enemy_bullet, transform.position, transform.rotation);
+    }
+}
