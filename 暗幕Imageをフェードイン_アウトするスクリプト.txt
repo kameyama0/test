@@ -1,0 +1,25 @@
+    float fade_time = 0.01f; //消える秒数の間隔
+
+
+    IEnumerator _AAA()
+    {
+        Image_xxx.raycastTarget = true; //クリックを無効化する
+
+        for (int i = 0; i < 10; i++) //画面を暗くする
+        {
+            CanvasGroup_xxx.alpha += 0.1f;
+            yield return new WaitForSeconds(fade_time);
+        }
+
+        CanvasGroup_xxx.alpha = 1;
+
+        for (int i = 0; i < 10; i++) //画面を明るくする
+        {
+            CanvasGroup_aaa.alpha -= 0.1f;
+            yield return new WaitForSeconds(fade_time);
+        }
+
+        CanvasGroup_xxx.alpha = 0;
+
+        Image_xxx.raycastTarget = false; //クリックを有効化する
+    }
