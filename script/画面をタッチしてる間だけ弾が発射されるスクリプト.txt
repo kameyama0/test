@@ -1,0 +1,71 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Danmaku : MonoBehaviour
+{
+    public GameObject danmaku_1; //発射する弾を設定する
+    public GameObject pos; //弾を生成する座標となるサブオブジェクトを設定する
+
+    private Coroutine shootingCoroutine;
+    private bool isCountingTime = false;
+    private float timeSinceLastTouch = 0f;
+
+    // n秒を指定できる変数
+    [Header("画面タッチを離してから何秒が経過したかを計測する秒数を指定")]
+    public float waitTime = 1.5f;
+
+    void Update()
+    {
+        // マウスボタンまたはタッチが押された場合
+        if (Input.GetMouseButtonDown(0))
+        {
+            // 弾の発射が開始されていない場合、コルーチンを開始
+            if (shootingCoroutine == null)
+            {
+                shootingCoroutine = StartCoroutine(Shoot());
+            }
+
+            // 時間計測をリセット
+            isCountingTime = false;
+            timeSinceLastTouch = 0f;
+        }
+
+        // マウスボタンまたはタッチが離された場合
+        if (Input.GetMouseButtonUp(0))
+        {
+            // 弾の発射を停止
+            if (shootingCoroutine != null)
+            {
+                StopCoroutine(shootingCoroutine);
+                shootingCoroutine = null;
+            }
+
+            // タッチが離されたので時間計測を開始
+            isCountingTime = true;
+        }
+
+        // タッチが離されてからの時間を計測
+        if (isCountingTime)
+        {
+            timeSinceLastTouch += Time.deltaTime;
+
+            // 指定したn秒が経過したらログを出力
+            if (timeSinceLastTouch >= waitTime)
+            {
+                Debug.Log("ここでアイテム自動回収の処理を実行する"); //★ここでアイテムを自動回収する処理を実行
+
+                isCountingTime = false; // 一度だけログを出力するためにフラグをリセット
+            }
+        }
+    }
+
+    private IEnumerator Shoot()
+    {
+        while (true)
+        {
+            Instantiate(danmaku_1, pos.transform.position, transform.rotation);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+}
