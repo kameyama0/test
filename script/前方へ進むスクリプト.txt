@@ -1,0 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class enemy_motion_pattern_1 : MonoBehaviour
+{
+    // オブジェクトの移動速度
+    public float speed = 5f;
+
+    void Update()
+    {
+        // オブジェクトの前方方向に移動させる
+        transform.Translate(Vector3.up * speed * Time.deltaTime);
+    }
+}
