@@ -1,0 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class danmaku : MonoBehaviour
+{
+    [Header("前方へ直進する弾を設定する")]
+    public GameObject bullet;
+
+    [Header("自機が避難できる角度を設定(数値が小さいほど難易度が高い)目安は45度でEASY")]
+    public int _rad = 45;
+    int random;
+
+    void Start()
+    {
+        StartCoroutine("AAA");
+    }
+
+    IEnumerator AAA()
+    {
+        yield return new WaitForSeconds(1);
+
+        for (int i = 0; i < 9999; i++)
+        {
+            //-----------------------------------------------------------------------------
+            for (int j = 0; j < 12; j++)
+            {
+                random = Random.Range(90, 270);
+                Instantiate(bullet, transform.position, transform.rotation);
+                transform.rotation = Quaternion.Euler(0, 0, random);
+                yield return new WaitForSeconds(0.2f);
+            }
+            //-----------------------------------------------------------------------------
+
+            //-----------------------------------------------------------------------------
+            for (int j = 0; j < 12; j++)
+            {
+                random = Random.Range(90, 270);
+                Instantiate(bullet, transform.position, transform.rotation);
+                transform.rotation = Quaternion.Euler(0, 0, random);
+
+                random = Random.Range(90, 270);
+                Instantiate(bullet, transform.position, transform.rotation);
+                transform.rotation = Quaternion.Euler(0, 0, random);
+
+                yield return new WaitForSeconds(0.2f);
+            }
+            //-----------------------------------------------------------------------------
+
+            yield return new WaitForSeconds(1);
+
+            for (int k = 0; k < 50; k++)
+            {
+                for (float rad = 0; rad < 360; rad += _rad)
+                {
+                    Instantiate(bullet, transform.position, transform.rotation);
+                    transform.rotation = Quaternion.Euler(0, 0, rad + k);
+                }
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+    }
+}
