@@ -1,0 +1,45 @@
+■■■■■■■■■■■■■■■■■■■■■■■■
+■                                            ■
+■  StartShake()を実行するとカメラが振動する  ■
+■                                            ■
+■■■■■■■■■■■■■■■■■■■■■■■■
+
+using System.Collections;
+using UnityEngine;
+
+public class CameraShake : MonoBehaviour
+{
+    public float shakeDuration = 0.5f;  // 振動の持続時間
+    public float shakeMagnitude = 0.1f; // 振動の強度
+
+    private Vector3 originalPos; // カメラの元の位置
+
+    public void StartShake()
+    {
+        // コルーチンを使ってカメラの振動を開始
+        StartCoroutine(Shake());
+    }
+
+    IEnumerator Shake()
+    {
+        float elapsed = 0.0f;
+
+        while (elapsed < shakeDuration)
+        {
+            // ランダムな位置を生成 (shakeMagnitudeの範囲内)
+            float offsetX = Random.Range(-1f, 1f) * shakeMagnitude;
+            float offsetY = Random.Range(-1f, 1f) * shakeMagnitude;
+
+            // 新しいカメラ位置を設定
+            transform.localPosition = new Vector3(originalPos.x + offsetX, originalPos.y + offsetY, originalPos.z);
+
+            elapsed += Time.deltaTime;
+
+            // 次のフレームまで待つ
+            yield return null;
+        }
+
+        // シェイク終了後、カメラの位置を元に戻す
+        transform.localPosition = originalPos;
+    }
+}
