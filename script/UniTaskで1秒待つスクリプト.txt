@@ -1,0 +1,12 @@
+using UnityEngine;
+using Cysharp.Threading.Tasks;
+
+public class test : MonoBehaviour
+{
+    async void Start()
+    {
+        await UniTask.Delay(1000);
+        
+        Debug.Log("あああ");
+    }
+}
