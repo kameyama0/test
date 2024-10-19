@@ -1,0 +1,63 @@
+スライダーの設置・設定手順
+======================================================================
+
+1) Hierarchy > Create > UI > Slider でスライダーを作成
+
+2) Sliderの子オブジェクトの「Handle Slide Area」を削除
+
+3) Sliderの子オブジェクト「Fill AreaのRect Transform」で Left と Right を 0 にする
+
+4) Fill Area の子オブジェクトの「FillのRect Transform」の Width を 0 にする
+
+5)「Background」の Image コンポーネントの Color を赤にする
+
+6) 「Fill」の Image コンポーネントの Color を緑にする
+
+7) 「Background」と「Fill」の Image の Source Image を None にする
+
+8) Canvas の Canvas Scaler コンポーネントの UI Scale Mode を Scale With Screen Size にする
+
+=====================================================================
+
+
+スクリプトからの操作方法
+=====================================================================
+
+using UnityEngine.UI;  ←忘れずに
+
+public Slider slider;  ←スライダーを入れる
+
+slider.value = 1;  ←value の数値を変えればスライダーのつまみを操作できる
+
+=====================================================================
+
+
+例
+=====================================================================
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class slider_test : MonoBehaviour
+{
+    public Slider slider;
+
+    public int hp_max = 100;
+    public int hp_now = 100;
+
+    private IEnumerator Start()
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            hp_now--;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private void Update()
+    {
+        slider.value = (float)hp_now / (float)hp_max;
+    }
+}
+=====================================================================
