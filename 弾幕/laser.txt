@@ -1,0 +1,97 @@
+using System.Collections;
+using UnityEngine;
+
+public class ScaleAnimation : MonoBehaviour
+{
+    private SpriteRenderer spriteRenderer; // SpriteRendererコンポーネント
+
+    void Awake()
+    {
+        // SpriteRendererコンポーネントの参照を取得
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    // X軸のスケールを0から2に、そして2から0に変化させるコルーチン
+    IEnumerator ScaleUp()
+    {
+        float duration = 0.5f; // 0.5秒間かけてスケールを変更
+        float elapsed = 0f;
+
+        float startScaleX = 0f; // スタートスケールのX軸
+        float endScaleX = 1f;   // エンドスケールのX軸
+
+        // アルファの初期値を0に設定
+        SetAlpha(0f);
+
+        while (elapsed < duration)
+        {
+            // 経過時間に基づいてX軸のスケールを線形補間
+            float newScaleX = Mathf.Lerp(startScaleX, endScaleX, elapsed / duration);
+            transform.localScale = new Vector3(newScaleX, 2f, 1f); // YとZは常に1に固定
+
+            // Alpha値を線形補間して1にする
+            SetAlpha(Mathf.Lerp(0f, 1f, elapsed / duration));
+
+            elapsed += Time.deltaTime;
+            yield return null;  // フレームごとに次の処理を待機
+        }
+
+        // 最後にエンドスケールとAlphaを設定して終了
+        transform.localScale = new Vector3(endScaleX, 2f, 1f);
+        SetAlpha(1f); // 確実にAlphaを1に設定
+
+        // 1秒待機してからScaleDownを開始
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(ScaleDown());
+    }
+
+    // X軸のスケールを2から0に戻すコルーチン
+    IEnumerator ScaleDown()
+    {
+        float duration = 0.5f; // 0.5秒間かけてスケールを戻す
+        float elapsed = 0f;
+
+        float startScaleX = 1f; // スタートスケールのX軸
+        float endScaleX = 0f;   // エンドスケールのX軸
+
+        // アルファの初期値を1に設定
+        SetAlpha(1f);
+
+        while (elapsed < duration)
+        {
+            // 経過時間に基づいてX軸のスケールを線形補間
+            float newScaleX = Mathf.Lerp(startScaleX, endScaleX, elapsed / duration);
+            transform.localScale = new Vector3(newScaleX, 2f, 1f); // YとZは常に1に固定
+
+            // Alpha値を線形補間して0に戻す
+            SetAlpha(Mathf.Lerp(1f, 0f, elapsed / duration));
+
+            elapsed += Time.deltaTime;
+            yield return null;  // フレームごとに次の処理を待機
+        }
+
+        // 最後にエンドスケールとAlphaを設定して終了
+        transform.localScale = new Vector3(endScaleX, 2f, 1f);
+        SetAlpha(0f); // 確実にAlphaを0に設定
+
+        // X軸のスケールが0になったらオブジェクトを削除
+        if (endScaleX == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // スケールアニメーションをスタートする
+    void Start()
+    {
+        StartCoroutine(ScaleUp());
+    }
+
+    // SpriteRendererのAlpha値を設定するヘルパーメソッド
+    private void SetAlpha(float alpha)
+    {
+        Color color = spriteRenderer.color;
+        color.a = alpha;
+        spriteRenderer.color = color;
+    }
+}
